@@ -361,7 +361,10 @@ function HeroSection() {
           {name.split(' ').map((word, wordIndex) => (
             <span key={wordIndex} className="inline-block whitespace-nowrap">
               {word.split('').map((char, charIndex) => (
-                <span key={`${wordIndex}-${charIndex}`} className="char inline-block">
+                <span 
+                  key={`${wordIndex}-${charIndex}`} 
+                  className="char inline-block transition-all duration-200 hover:-translate-y-3 hover:scale-110 hover:text-indigo-400 cursor-default"
+                >
                   {char}
                 </span>
               ))}
