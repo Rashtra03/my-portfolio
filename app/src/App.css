@@ -1,0 +1,212 @@
+/* App-specific styles */
+
+/* Ensure smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Card hover transitions */
+.glass-card {
+  transition: all 0.3s ease;
+}
+
+/* Project card image zoom */
+.project-card img {
+  transition: transform 0.5s ease;
+}
+
+/* Timeline responsive adjustments */
+@media (max-width: 768px) {
+  .timeline-line {
+    left: 1rem !important;
+  }
+}
+
+/* Form input transitions */
+.form-input {
+  transition: all 0.3s ease;
+}
+
+/* Button press effect */
+.btn-primary:active,
+.btn-secondary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Focus states */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Particle animation variations */
+.particle:nth-child(2) { animation-delay: 0.5s; animation-duration: 10s; }
+.particle:nth-child(3) { animation-delay: 1s; animation-duration: 12s; }
+.particle:nth-child(4) { animation-delay: 1.5s; animation-duration: 9s; }
+.particle:nth-child(5) { animation-delay: 2s; animation-duration: 11s; }
+.particle:nth-child(6) { animation-delay: 2.5s; animation-duration: 13s; }
+
+/* Scrollbar styling for webkit browsers */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #27272a #0a0a0f;
+}
+
+/* Mobile menu animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Counter animation smoothness */
+.counter {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Progress bar glow */
+.progress-bar-fill {
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+/* Gradient border animation */
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.gradient-border::before {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Card lift on hover */
+.glass-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Tech tag hover */
+.project-card .flex-wrap span {
+  transition: all 0.2s ease;
+}
+
+.project-card .flex-wrap span:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+/* Link hover underline animation */
+.link-underline::after {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Social icon hover */
+a[class*="rounded-full"]:hover {
+  transform: translateY(-2px);
+}
+
+/* Certification card hover */
+.cert-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Education card hover */
+.education-card:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Timeline item hover */
+.timeline-item .glass-card:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Contact form focus glow */
+.form-input:focus {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), 0 0 20px rgba(99, 102, 241, 0.1);
+}
+
+/* Submit button loading state */
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Success animation */
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Navigation blur effect */
+nav {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Hero background parallax effect */
+.hero-bg {
+  will-change: transform;
+}
+
+/* Stats card hover */
+.glass-card:hover .gradient-text {
+  filter: brightness(1.2);
+}
+
+/* Skill bar animation */
+@keyframes fillBar {
+  from {
+    width: 0;
+  }
+}
+
+.progress-bar-fill {
+  animation: fillBar 1.5s ease-out forwards;
+}
+
+/* Responsive typography adjustments */
+@media (max-width: 640px) {
+  .font-display {
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Print styles */
+@media print {
+  nav,
+  .scroll-indicator,
+  .hero-socials {
+    display: none !important;
+  }
+  
+  section {
+    break-inside: avoid;
+  }
+}
