@@ -1076,8 +1076,23 @@ function ContactSection() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Construct the mailto link with form data
+    const subject = encodeURIComponent(formState.subject || 'New Contact from Portfolio');
+    const body = encodeURIComponent(
+      `Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`
+    );
+    
+    // Open the user's default email client
+    window.location.href = `mailto:krashtrabhushan@gmail.com?subject=${subject}&body=${body}`;
+
     setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 3000);
+    
+    // Reset form after a few seconds
+    setTimeout(() => {
+      setIsSubmitted(false);
+      setFormState({ name: '', email: '', subject: '', message: '' });
+    }, 3000);
   };
 
   const copyEmail = () => {
