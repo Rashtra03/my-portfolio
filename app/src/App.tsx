@@ -357,10 +357,14 @@ function HeroSection() {
           Electronics & Communication Engineer
         </p>
         
-        <h1 ref={nameRef} className="font-display font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight mb-6">
-          {name.split('').map((char, i) => (
-            <span key={i} className="char inline-block">
-              {char === ' ' ? '\u00A0' : char}
+        <h1 ref={nameRef} className="font-display font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight mb-6 flex flex-wrap justify-center gap-[0.3em]">
+          {name.split(' ').map((word, wordIndex) => (
+            <span key={wordIndex} className="inline-block whitespace-nowrap">
+              {word.split('').map((char, charIndex) => (
+                <span key={`${wordIndex}-${charIndex}`} className="char inline-block">
+                  {char}
+                </span>
+              ))}
             </span>
           ))}
         </h1>
