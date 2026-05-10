@@ -20,7 +20,9 @@ import {
   Briefcase,
   CheckCircle2,
   Menu,
-  X
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
 import './App.css';
 
@@ -87,11 +89,13 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const followerRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const cursor = cursorRef.current;
     const follower = followerRef.current;
-    if (!cursor || !follower) return;
+    const glow = glowRef.current;
+    if (!cursor || !follower || !glow) return;
 
     // Use QuickTo for better performance
     const xToCursor = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power3" });
@@ -100,21 +104,28 @@ function CustomCursor() {
     const xToFollower = gsap.quickTo(follower, "x", { duration: 0.3, ease: "power3" });
     const yToFollower = gsap.quickTo(follower, "y", { duration: 0.3, ease: "power3" });
 
+    const xToGlow = gsap.quickTo(glow, "x", { duration: 1.5, ease: "power3" });
+    const yToGlow = gsap.quickTo(glow, "y", { duration: 1.5, ease: "power3" });
+
     const moveCursor = (e: MouseEvent) => {
       xToCursor(e.clientX);
       yToCursor(e.clientY);
       xToFollower(e.clientX);
       yToFollower(e.clientY);
+      xToGlow(e.clientX);
+      yToGlow(e.clientY);
     };
 
     const handleHover = () => {
       gsap.to(follower, { scale: 1.5, backgroundColor: 'rgba(99, 102, 241, 0.1)', duration: 0.3 });
       gsap.to(cursor, { scale: 0, duration: 0.3 });
+      gsap.to(glow, { scale: 1.2, opacity: 0.8, duration: 0.3 });
     };
 
     const handleHoverOut = () => {
       gsap.to(follower, { scale: 1, backgroundColor: 'transparent', duration: 0.3 });
       gsap.to(cursor, { scale: 1, duration: 0.3 });
+      gsap.to(glow, { scale: 1, opacity: 0.5, duration: 0.3 });
     };
 
     window.addEventListener('mousemove', moveCursor);
@@ -150,6 +161,7 @@ function CustomCursor() {
 
   return (
     <>
+      <div ref={glowRef} className="fixed top-0 left-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[100px] pointer-events-none z-[-1] -translate-x-1/2 -translate-y-1/2 mix-blend-screen hidden md:block transition-opacity duration-300 opacity-50" />
       <div ref={cursorRef} className="fixed top-0 left-0 w-2 h-2 bg-indigo-400 rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference hidden md:block" />
       <div ref={followerRef} className="fixed top-0 left-0 w-8 h-8 border border-indigo-400/50 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-colors hidden md:block" />
     </>
@@ -195,7 +207,7 @@ function Magnetic({ children }: { children: React.ReactElement }) {
 
 
 // Navigation Component
-function Navigation() {
+function Navigation({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: (e: React.MouseEvent) => void }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -242,15 +254,30 @@ function Navigation() {
                 {item.label}
               </button>
             ))}
+            <button 
+              onClick={toggleTheme}
+              className="p-2 rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white transition-colors ml-4"
+              aria-label="Toggle Theme"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-white"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="md:hidden flex items-center gap-4">
+            <button 
+              onClick={toggleTheme}
+              className="p-2 rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white transition-colors"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+            <button 
+              className="text-white"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -331,9 +358,9 @@ function HeroSection() {
         <img 
           src="/images/hero_gradient.jpg" 
           alt="" 
-          className="w-full h-full object-cover opacity-60"
+          className="w-full h-full object-cover opacity-60 light-hero-img"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0f]/50 via-transparent to-[#0a0a0f]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0f]/50 via-transparent to-[#0a0a0f] light-hero-overlay" />
       </div>
 
       {/* Floating Particles */}
@@ -357,13 +384,34 @@ function HeroSection() {
           Electronics & Communication Engineer
         </p>
         
-        <h1 ref={nameRef} className="font-display font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight mb-6 flex flex-wrap justify-center gap-[0.3em]">
+        <h1 ref={nameRef} className="relative font-display font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight mb-6 flex flex-wrap justify-center gap-[0.3em] group">
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-indigo-500/30 blur-3xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           {name.split(' ').map((word, wordIndex) => (
             <span key={wordIndex} className="inline-block whitespace-nowrap">
               {word.split('').map((char, charIndex) => (
                 <span 
                   key={`${wordIndex}-${charIndex}`} 
-                  className="char inline-block transition-all duration-200 hover:-translate-y-3 hover:scale-110 hover:text-indigo-400 cursor-default"
+                  className="char inline-block cursor-default"
+                  onMouseEnter={(e) => {
+                    gsap.to(e.currentTarget, {
+                      y: -20,
+                      scale: 1.2,
+                      color: '#818cf8',
+                      textShadow: '0 0 20px rgba(129, 140, 248, 0.8)',
+                      duration: 0.3,
+                      ease: 'power2.out',
+                    });
+                  }}
+                  onMouseLeave={(e) => {
+                    gsap.to(e.currentTarget, {
+                      y: 0,
+                      scale: 1,
+                      color: '',
+                      textShadow: 'none',
+                      duration: 0.8,
+                      ease: 'elastic.out(1, 0.3)',
+                    });
+                  }}
                 >
                   {char}
                 </span>
@@ -503,21 +551,10 @@ function AboutSection() {
             
             <div className="space-y-4 text-zinc-400 leading-relaxed mb-8">
               <p>
-                I'm an Electronics & Communication Engineering student with a passion for creating 
-                innovative solutions that bridge the gap between hardware and software. My journey 
-                in engineering has equipped me with a diverse skill set spanning embedded systems, 
-                signal processing, and full-stack development.
+                I'm an Electronics & Communication Engineering student with a passion for bridging the gap between hardware and software. I specialize in embedded systems, signal processing, and full-stack development.
               </p>
               <p>
-                Through hands-on projects and internships, I've developed a strong foundation in 
-                circuit design, programming, and data analysis. I'm particularly fascinated by 
-                space technology and have had the opportunity to work with JWST data during my 
-                internship at ISA Summer School.
-              </p>
-              <p>
-                When I'm not coding or designing circuits, you'll find me exploring new technologies, 
-                contributing to open-source projects, or capturing the beauty of city lights through 
-                my lens.
+                Through hands-on projects and an internship at ISA Summer School working with JWST data, I've built a strong foundation in circuit design, programming, and data analysis.
               </p>
             </div>
 
@@ -594,33 +631,17 @@ function SkillsSection() {
     {
       title: 'Programming & Development',
       icon: <Code2 className="w-5 h-5" />,
-      skills: [
-        { name: 'Python', level: 90 },
-        { name: 'C/C++', level: 85 },
-        { name: 'JavaScript', level: 80 },
-        { name: 'React.js', level: 75 },
-        { name: 'HTML/CSS', level: 85 },
-      ]
+      skills: ['Python', 'C/C++', 'JavaScript', 'React.js', 'HTML/CSS', 'TypeScript', 'Node.js']
     },
     {
       title: 'Hardware & Engineering',
       icon: <Cpu className="w-5 h-5" />,
-      skills: [
-        { name: 'Circuit Design', level: 80 },
-        { name: 'Signal Processing', level: 85 },
-        { name: 'Embedded Systems', level: 70 },
-        { name: 'MATLAB', level: 75 },
-      ]
+      skills: ['Circuit Design', 'Signal Processing', 'Embedded Systems', 'MATLAB']
     },
     {
       title: 'Tools & Platforms',
       icon: <Briefcase className="w-5 h-5" />,
-      skills: [
-        { name: 'Git/GitHub', level: 85 },
-        { name: 'VS Code', level: 90 },
-        { name: 'Jupyter Notebook', level: 80 },
-        { name: 'Arduino', level: 75 },
-      ]
+      skills: ['Git/GitHub', 'VS Code', 'Jupyter Notebook', 'Arduino', 'Linux', 'Docker']
     },
   ];
 
@@ -636,7 +657,7 @@ function SkillsSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {skillCategories.map((category, catIndex) => (
-            <div key={catIndex} className="skills-card glass-card rounded-2xl p-6">
+            <div key={catIndex} className="skills-card glass-card rounded-2xl p-6 hover:glow-indigo-sm transition-all duration-300">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center text-indigo-400">
                   {category.icon}
@@ -644,9 +665,14 @@ function SkillsSection() {
                 <h3 className="font-display font-semibold text-white">{category.title}</h3>
               </div>
               
-              <div className="space-y-4">
+              <div className="flex flex-wrap gap-2">
                 {category.skills.map((skill, skillIndex) => (
-                  <SkillBar key={skillIndex} name={skill.name} level={skill.level} delay={catIndex * 0.1 + skillIndex * 0.05} />
+                  <span
+                    key={skillIndex}
+                    className="px-3 py-1.5 text-sm rounded-lg bg-white/5 text-zinc-300 border border-white/10 hover:border-indigo-500/50 hover:text-indigo-300 hover:bg-indigo-500/10 transition-all duration-300 cursor-default"
+                  >
+                    {skill}
+                  </span>
                 ))}
               </div>
             </div>
@@ -654,45 +680,6 @@ function SkillsSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-// Skill Bar Component
-function SkillBar({ name, level, delay }: { name: string; level: number; delay: number }) {
-  const barRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay * 1000);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    if (barRef.current) {
-      observer.observe(barRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [delay]);
-
-  return (
-    <div ref={barRef}>
-      <div className="flex justify-between text-sm mb-1">
-        <span className="text-zinc-300">{name}</span>
-        <span className="text-zinc-500">{level}%</span>
-      </div>
-      <div className="progress-bar">
-        <div 
-          className="progress-bar-fill"
-          style={{ width: isVisible ? `${level}%` : '0%' }}
-        />
-      </div>
-    </div>
   );
 }
 
@@ -893,99 +880,6 @@ function ExperienceSection() {
   );
 }
 
-// Education Section
-function EducationSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.education-card', 
-        { opacity: 0, y: 30 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          stagger: 0.15,
-          duration: 0.6,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
-          }
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const education = [
-    {
-      degree: 'B.Tech - Electronics & Communication Engineering',
-      institution: 'Pursuing',
-      duration: '2023 - 2027 (Expected)',
-      description: 'Undergraduate degree with focus on embedded systems, signal processing, and communication systems.',
-      coursework: ['Signals & Systems', 'Digital Electronics', 'Communication Theory', 'Microcontrollers', 'VLSI Design'],
-    },
-    {
-      degree: 'Class 12th - Science Stream',
-      institution: 'Kendriya Vidyalaya, Katihar',
-      duration: '2023',
-      description: 'Completed senior secondary education with Physics, Chemistry, and Mathematics.',
-      coursework: ['Physics', 'Chemistry', 'Mathematics'],
-    },
-    {
-      degree: 'Class 10th',
-      institution: 'Kendriya Vidyalaya, Katihar',
-      duration: '2021',
-      description: 'Completed secondary education with distinction.',
-      coursework: ['Science', 'Mathematics', 'Computer Science'],
-    },
-  ];
-
-  return (
-    <section ref={sectionRef} className="py-24 px-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="font-mono text-xs tracking-[0.2em] text-indigo-400 uppercase mb-4">Academic Background</p>
-          <h2 className="font-display font-bold text-4xl md:text-5xl text-white">
-            <span className="gradient-text">Education</span>
-          </h2>
-        </div>
-
-        <div className="space-y-6">
-          {education.map((edu, index) => (
-            <div key={index} className="education-card glass-card rounded-2xl p-6 hover:glow-indigo-sm transition-all duration-300">
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center text-indigo-400">
-                      <BookOpen className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-display font-semibold text-white">{edu.degree}</h3>
-                      <p className="text-zinc-400 text-sm">{edu.institution}</p>
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 text-sm mt-3">{edu.description}</p>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {edu.coursework.map((course, i) => (
-                      <span key={i} className="px-2 py-1 text-xs rounded-md bg-white/5 text-zinc-400">
-                        {course}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-zinc-500 text-sm">
-                  <Calendar className="w-4 h-4" />
-                  {edu.duration}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // Certifications Section
 function CertificationsSection() {
@@ -1265,22 +1159,68 @@ function Footer() {
 // Main App
 function App() {
   const [loading, setLoading] = useState(true);
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+    }
+  }, [isDark]);
+
+  const toggleTheme = (e: React.MouseEvent) => {
+    const x = e.clientX;
+    const y = e.clientY;
+
+    if (!document.startViewTransition) {
+      setIsDark(!isDark);
+      return;
+    }
+
+    const endRadius = Math.hypot(
+      Math.max(x, innerWidth - x),
+      Math.max(y, innerHeight - y)
+    );
+
+    const transition = document.startViewTransition(() => {
+      setIsDark(!isDark);
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`,
+      ];
+
+      document.documentElement.animate(
+        {
+          clipPath: clipPath,
+        },
+        {
+          duration: 1000,
+          easing: 'ease-in-out',
+          pseudoElement: '::view-transition-new(root)',
+        }
+      );
+    });
+  };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white">
+    <div className="min-h-screen bg-[#0a0a0f] text-white transition-colors duration-300">
       <CustomCursor />
       <div className="noise-overlay" />
       {loading ? (
         <Preloader onComplete={() => setLoading(false)} />
       ) : (
         <>
-          <Navigation />
+          <Navigation isDark={isDark} toggleTheme={toggleTheme} />
           <HeroSection />
           <AboutSection />
           <SkillsSection />
           <ProjectsSection />
           <ExperienceSection />
-          <EducationSection />
+
           <CertificationsSection />
           <ContactSection />
           <Footer />
