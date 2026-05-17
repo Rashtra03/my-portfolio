@@ -879,6 +879,97 @@ function ExperienceSection() {
 }
 
 
+// Education Section
+function EducationSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.edu-card', 
+        { opacity: 0, y: 30 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          stagger: 0.15,
+          duration: 0.6,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 70%',
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const education = [
+    {
+      degree: 'B.Tech — Electronics & Communication Engineering',
+      institution: 'University Name',
+      duration: '2023 – 2027 (Expected)',
+      details: 'Pursuing undergraduate degree with focus on embedded systems and signal processing.',
+      coursework: ['Signals & Systems', 'Digital Electronics', 'Communication Theory', 'Microcontrollers', 'VLSI Design']
+    },
+    {
+      degree: 'Class 12th',
+      institution: 'Kendriya Vidyalaya, Katihar',
+      duration: '2023',
+      details: 'Completed senior secondary education with Science stream',
+      coursework: []
+    },
+    {
+      degree: 'Class 10th',
+      institution: 'Kendriya Vidyalaya, Katihar',
+      duration: '2021',
+      details: 'Completed secondary education',
+      coursework: []
+    }
+  ];
+
+  return (
+    <section id="education" ref={sectionRef} className="py-24 px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-16">
+          <p className="font-mono text-xs tracking-[0.2em] text-indigo-400 uppercase mb-4">Academic Background</p>
+          <h2 className="font-display font-bold text-4xl md:text-5xl text-white">
+            <span className="gradient-text">Education</span>
+          </h2>
+        </div>
+
+        <div className="space-y-6">
+          {education.map((edu, index) => (
+            <div key={index} className="edu-card glass-card rounded-2xl p-6 md:p-8 hover:glow-indigo-sm transition-all duration-300">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
+                <div>
+                  <h3 className="font-display font-semibold text-xl text-white mb-1 transition-colors">{edu.degree}</h3>
+                  <p className="text-indigo-400 font-medium">{edu.institution}</p>
+                </div>
+                <div className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-sm whitespace-nowrap">
+                  {edu.duration}
+                </div>
+              </div>
+              
+              <p className="text-zinc-400 mb-4">{edu.details}</p>
+              
+              {edu.coursework.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-sm text-zinc-500 mr-2 flex items-center">Coursework:</span>
+                  {edu.coursework.map((course, i) => (
+                    <span key={i} className="px-2 py-1 text-xs rounded-md bg-white/5 text-zinc-300 border border-white/10">
+                      {course}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Certifications Section
 function CertificationsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -1218,7 +1309,7 @@ function App() {
           <SkillsSection />
           <ProjectsSection />
           <ExperienceSection />
-
+          <EducationSection />
           <CertificationsSection />
           <ContactSection />
           <Footer />
