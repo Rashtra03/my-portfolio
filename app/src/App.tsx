@@ -528,11 +528,25 @@ function AboutSection() {
           {/* Image */}
           <div className="about-image relative group">
             <div className="relative rounded-2xl overflow-hidden gradient-border">
-              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/30 to-purple-500/30 mix-blend-overlay z-10 transition-opacity duration-500 group-hover:opacity-0" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/30 to-purple-500/30 mix-blend-overlay z-10 transition-opacity duration-500 group-hover:opacity-0 pointer-events-none" />
               <img 
                 src="/images/about_portrait.jpg" 
                 alt="Rashtra Bhushan" 
                 className="w-full aspect-[3/4] object-cover contrast-[1.1] brightness-[0.9] grayscale-[0.5] transition-all duration-500 group-hover:grayscale-0 group-hover:brightness-100"
+                onMouseEnter={(e) => {
+                  gsap.killTweensOf(e.currentTarget);
+                  gsap.to(e.currentTarget, {
+                    rotation: 3,
+                    scale: 1.05,
+                    duration: 0.15,
+                    yoyo: true,
+                    repeat: 5,
+                    ease: "sine.inOut",
+                    onComplete: () => {
+                      gsap.to(e.currentTarget, { rotation: 0, scale: 1, duration: 0.2 });
+                    }
+                  });
+                }}
               />
             </div>
             {/* Decorative elements */}
