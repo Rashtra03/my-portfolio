@@ -23,6 +23,7 @@ import {
   Moon
 } from 'lucide-react';
 import './App.css';
+import EcommerceDemo from './components/EcommerceDemo';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -698,6 +699,7 @@ function SkillsSection() {
 // Projects Section
 function ProjectsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [isEcommerceDemoOpen, setIsEcommerceDemoOpen] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -732,7 +734,7 @@ function ProjectsSection() {
       description: 'A modern, responsive e-commerce web application with product listings and interactive UI components.',
       image: '/images/project_ecommerce.jpg',
       tech: ['React', 'JavaScript', 'HTML/CSS', 'Tailwind'],
-      links: { github: '#', demo: '#' }
+      links: { github: 'https://github.com/rashtra03/E-Commerce-Store', demo: 'https://rashtra03.github.io/E-Commerce-Store/' }
     },
     {
       title: 'Library Management System',
@@ -793,7 +795,16 @@ function ProjectsSection() {
                     Code
                   </a>
                   {project.links.demo && (
-                    <a href={project.links.demo} className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white transition-colors">
+                    <a 
+                      href={project.links.demo} 
+                      onClick={(e) => {
+                        if (project.title === 'E-commerce Web Page') {
+                          e.preventDefault();
+                          setIsEcommerceDemoOpen(true);
+                        }
+                      }}
+                      className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white transition-colors"
+                    >
                       <ExternalLink className="w-4 h-4" />
                       Live Demo
                     </a>
@@ -804,6 +815,10 @@ function ProjectsSection() {
           ))}
         </div>
       </div>
+
+      {isEcommerceDemoOpen && (
+        <EcommerceDemo onClose={() => setIsEcommerceDemoOpen(false)} />
+      )}
     </section>
   );
 }
