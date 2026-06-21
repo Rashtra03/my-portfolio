@@ -2,17 +2,17 @@ import { useState, useEffect, useRef } from 'react';
 import { X, ExternalLink, Globe, RefreshCw } from 'lucide-react';
 import gsap from 'gsap';
 
-interface EcommerceDemoProps {
+interface LiveDemoModalProps {
+  demoUrl: string;
+  projectTitle: string;
   onClose: () => void;
 }
 
-export default function EcommerceDemo({ onClose }: EcommerceDemoProps) {
+export default function LiveDemoModal({ demoUrl, projectTitle, onClose }: LiveDemoModalProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [iframeKey, setIframeKey] = useState(0); // Used for refreshing the iframe
   const modalRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const demoUrl = 'https://rashtra03.github.io/E-Commerce-Store/';
 
   // Animate modal open
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function EcommerceDemo({ onClose }: EcommerceDemoProps) {
             </div>
             <div className="min-w-0">
               <span className="font-display font-semibold text-sm text-white block truncate">
-                E-Commerce Store Live Demo
+                {projectTitle} Live Demo
               </span>
               <a 
                 href={demoUrl} 
@@ -126,14 +126,14 @@ export default function EcommerceDemo({ onClose }: EcommerceDemoProps) {
           {isLoading && (
             <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#12121a]">
               <div className="w-10 h-10 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
-              <p className="text-zinc-500 text-xs font-mono">Loading live storefront...</p>
+              <p className="text-zinc-500 text-xs font-mono">Loading live demo...</p>
             </div>
           )}
 
           <iframe 
             key={iframeKey}
             src={demoUrl} 
-            title="E-Commerce Store Live Demo"
+            title={`${projectTitle} Live Demo`}
             className="w-full h-full border-0 bg-white"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"

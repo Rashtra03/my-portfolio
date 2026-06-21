@@ -23,7 +23,7 @@ import {
   Moon
 } from 'lucide-react';
 import './App.css';
-import EcommerceDemo from './components/EcommerceDemo';
+import LiveDemoModal from './components/LiveDemoModal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -699,7 +699,7 @@ function SkillsSection() {
 // Projects Section
 function ProjectsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [isEcommerceDemoOpen, setIsEcommerceDemoOpen] = useState(false);
+  const [activeDemo, setActiveDemo] = useState<{ url: string; title: string } | null>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -723,11 +723,11 @@ function ProjectsSection() {
 
   const projects = [
     {
-      title: 'JWST MIRI Data Analysis',
-      description: 'Analyzed James Webb Space Telescope MIRI data for spectral line identification. Performed data preprocessing and scientific visualization using Python.',
-      image: '/images/project_jwst.jpg',
-      tech: ['Python', 'Astropy', 'NumPy', 'Matplotlib'],
-      links: { github: '#', demo: '#' }
+      title: 'Refokus Clone',
+      description: 'A pixel-perfect clone of the award-winning Refokus website, featuring complex GSAP animations, smooth scrolling, and dynamic interactions.',
+      image: '/images/project_refokus.png',
+      tech: ['React', 'Tailwind CSS', 'GSAP', 'Framer Motion'],
+      links: { github: 'https://github.com/rashtra03/refokus_clone', demo: 'https://rashtra03.github.io/refokus_clone/' }
     },
     {
       title: 'E-commerce Web Page',
@@ -798,9 +798,9 @@ function ProjectsSection() {
                     <a 
                       href={project.links.demo} 
                       onClick={(e) => {
-                        if (project.title === 'E-commerce Web Page') {
+                        if (project.title === 'E-commerce Web Page' || project.title === 'Refokus Clone') {
                           e.preventDefault();
-                          setIsEcommerceDemoOpen(true);
+                          setActiveDemo({ url: project.links.demo!, title: project.title });
                         }
                       }}
                       className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white transition-colors"
@@ -816,8 +816,12 @@ function ProjectsSection() {
         </div>
       </div>
 
-      {isEcommerceDemoOpen && (
-        <EcommerceDemo onClose={() => setIsEcommerceDemoOpen(false)} />
+      {activeDemo && (
+        <LiveDemoModal 
+          demoUrl={activeDemo.url}
+          projectTitle={activeDemo.title}
+          onClose={() => setActiveDemo(null)} 
+        />
       )}
     </section>
   );

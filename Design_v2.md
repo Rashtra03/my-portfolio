@@ -179,26 +179,20 @@ Success:              `#22c55e`
 
 #### Projects
 
-**1. JWST MIRI Data Analysis**
-- Description: Analyzed James Webb Space Telescope MIRI data for spectral line identification. Performed data preprocessing and scientific visualization.
-- Tech: Python, Astropy, NumPy, Matplotlib
+**1. Refokus Clone**
+- Description: A pixel-perfect clone of the award-winning Refokus website, featuring complex GSAP animations, smooth scrolling, and dynamic interactions.
+- Tech: React, Tailwind CSS, GSAP, Framer Motion
 - Links: GitHub, Live Demo
-- Image: Space/astronomy themed
+- Image: Modern web agency themed
 
-**2. Smart Home Dashboard**
-- Description: Full-stack IoT monitoring dashboard with real-time device control, responsive design, and data visualization.
-- Tech: React, Node.js, Express, MongoDB, Socket.io
+**2. E-commerce Web Page**
+- Description: A modern, responsive e-commerce web application with product listings and interactive UI components.
+- Tech: React, JavaScript, HTML/CSS, Tailwind
 - Links: GitHub, Live Demo
-- Image: Tech dashboard UI
+- Image: Online shopping themed
 
-**3. Signal Visualizer**
-- Description: Web-based DSP tool for FFT analysis, filter simulation, and signal processing experiments.
-- Tech: JavaScript, Web Audio API, Canvas, React
-- Links: GitHub, Live Demo
-- Image: Waveform visualization
-
-**4. Library Management System**
-- Description: Python-based library system with add, issue, return, and view operations. Clean CLI interface.
+**3. Library Management System**
+- Description: Python-based library system with add, issue, return, and view operations. Features clean CLI interface and SQLite database.
 - Tech: Python, SQLite, OOP
 - Links: GitHub
 - Image: Code/terminal themed
