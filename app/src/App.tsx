@@ -703,19 +703,27 @@ function ProjectsSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.project-card', 
-        { opacity: 0, y: 50 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          stagger: 0.15,
-          duration: 0.7,
+      const cards = gsap.utils.toArray<HTMLElement>('.project-card-wrapper');
+      
+      cards.forEach((card, index) => {
+        // Skip animating the last card since there is nothing following it to stack on top of it
+        if (index === cards.length - 1) return;
+        
+        const innerCard = card.querySelector('.project-card-inner');
+        
+        gsap.to(innerCard, {
+          scale: 0.92,
+          opacity: 0.4,
+          filter: "blur(2px)",
           scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
+            trigger: card,
+            start: 'top 15vh', // Starts when the card gets stuck at top-[15vh]
+            end: () => `bottom 15vh`, // Ends when the card's wrapper bottom reaches the sticky top point
+            scrub: true,
+            invalidateOnRefresh: true,
           }
-        }
-      );
+        });
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -746,7 +754,7 @@ function ProjectsSection() {
   ];
 
   return (
-    <section id="projects" ref={sectionRef} className="py-24 px-6">
+    <section id="projects" ref={sectionRef} className="py-24 px-6 relative">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
           <div>
@@ -761,54 +769,74 @@ function ProjectsSection() {
           </a>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-[8vh] pb-[10vh]">
           {projects.map((project, index) => (
-            <div key={index} className="project-card group glass-card rounded-2xl overflow-hidden hover:glow-indigo-sm transition-all duration-500">
-              <div className="relative overflow-hidden">
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  className="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent" />
-              </div>
-              
-              <div className="p-6">
-                <h3 className="font-display font-semibold text-xl text-white mb-2 group-hover:text-indigo-400 transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-zinc-400 text-sm mb-4 line-clamp-2">
-                  {project.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tech.map((tech, i) => (
-                    <span key={i} className="px-3 py-1 text-xs rounded-full bg-white/5 text-zinc-400 border border-white/10">
-                      {tech}
-                    </span>
-                  ))}
+            <div 
+              key={index} 
+              className="project-card-wrapper sticky top-[15vh] w-full"
+              style={{ 
+                paddingTop: `${index * 20}px`,
+                zIndex: index + 1 
+              }}
+            >
+              <div className="project-card-inner glass-card !rounded-3xl border border-white/10 overflow-hidden shadow-2xl flex flex-col lg:flex-row min-h-[60vh] lg:h-[70vh] transition-all duration-500 hover:border-indigo-500/30 transform-gpu">
+                {/* Left Side: Content */}
+                <div className="p-8 lg:p-12 flex flex-col justify-between flex-[1] z-10 relative">
+                  <div>
+                    <div className="flex justify-between items-center mb-6">
+                      <span className="font-mono text-5xl font-extrabold text-indigo-500/10 tracking-widest">
+                        0{index + 1}
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {project.tech.map((tech, i) => (
+                          <span key={i} className="px-3 py-1 text-xs rounded-full bg-white/5 text-zinc-400 border border-white/10">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <h3 className="font-display font-bold text-3xl md:text-4xl text-white mb-4 group-hover:text-indigo-400 transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-zinc-400 text-base md:text-lg mb-8 leading-relaxed max-w-xl">
+                      {project.description}
+                    </p>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-4 mt-auto">
+                    <a 
+                      href={project.links.github} 
+                      className="btn-secondary flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 hover:border-white/20 hover:bg-white/5 text-sm text-zinc-300 hover:text-white transition-all duration-300"
+                    >
+                      <Github className="w-5 h-5" />
+                      Code Repository
+                    </a>
+                    {project.links.demo && (
+                      <a 
+                        href={project.links.demo} 
+                        onClick={(e) => {
+                          if (project.title === 'E-commerce Web Page' || project.title === 'Refokus Clone') {
+                            e.preventDefault();
+                            setActiveDemo({ url: project.links.demo!, title: project.title });
+                          }
+                        }}
+                        className="btn-primary flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-sm text-white font-semibold transition-all duration-300 shadow-lg shadow-indigo-600/20"
+                      >
+                        <ExternalLink className="w-5 h-5" />
+                        Live Preview
+                      </a>
+                    )}
+                  </div>
                 </div>
                 
-                <div className="flex gap-3">
-                  <a href={project.links.github} className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white transition-colors">
-                    <Github className="w-4 h-4" />
-                    Code
-                  </a>
-                  {project.links.demo && (
-                    <a 
-                      href={project.links.demo} 
-                      onClick={(e) => {
-                        if (project.title === 'E-commerce Web Page' || project.title === 'Refokus Clone') {
-                          e.preventDefault();
-                          setActiveDemo({ url: project.links.demo!, title: project.title });
-                        }
-                      }}
-                      className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white transition-colors"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Live Demo
-                    </a>
-                  )}
+                {/* Right Side: Visual Image */}
+                <div className="flex-[1.2] relative overflow-hidden min-h-[300px] lg:min-h-0 border-t lg:border-t-0 lg:border-l border-white/10 group">
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#12121a] via-transparent to-transparent opacity-90 lg:opacity-70" />
                 </div>
               </div>
             </div>
@@ -833,19 +861,49 @@ function ExperienceSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.timeline-item', 
-        { opacity: 0, x: -30 },
-        { 
-          opacity: 1, 
-          x: 0, 
-          stagger: 0.2,
-          duration: 0.6,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
-          }
-        }
-      );
+      // Only animate on desktop (lg viewport)
+      if (window.innerWidth >= 1024) {
+        const visualBlocks = gsap.utils.toArray<HTMLElement>('.experience-visual-block');
+        const textBlocks = gsap.utils.toArray<HTMLElement>('.experience-text-block');
+        
+        // Initial state: first text block is active
+        gsap.set(textBlocks[0], { opacity: 1, y: 0, pointerEvents: 'auto' });
+        
+        visualBlocks.forEach((block, index) => {
+          ScrollTrigger.create({
+            trigger: block,
+            start: 'top 50%',
+            end: 'bottom 50%',
+            onToggle: (self) => {
+              if (self.isActive) {
+                // Fade in corresponding text block
+                gsap.to(textBlocks[index], { 
+                  opacity: 1, 
+                  y: 0, 
+                  duration: 0.5, 
+                  pointerEvents: 'auto',
+                  overwrite: 'auto',
+                  ease: 'power2.out' 
+                });
+                
+                // Fade out others
+                textBlocks.forEach((tb, i) => {
+                  if (i !== index) {
+                    gsap.to(tb, { 
+                      opacity: 0, 
+                      y: -20, 
+                      duration: 0.5, 
+                      pointerEvents: 'none',
+                      overwrite: 'auto',
+                      ease: 'power2.in' 
+                    });
+                  }
+                });
+              }
+            }
+          });
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -858,53 +916,114 @@ function ExperienceSection() {
       duration: 'Summer 2025',
       description: 'Worked on JWST MIRI data analysis, learned fundamentals of spectroscopy, and enhanced scientific programming skills. Collaborated with researchers on spectral line identification projects.',
       skills: ['Data Analysis', 'Python', 'Astrophysics', 'Spectroscopy'],
+      image: '/images/project_jwst.jpg'
+    },
+    {
+      role: 'Web Development Intern',
+      company: 'Invigo Infotech',
+      duration: 'Summer 2024',
+      description: 'Completed an intensive internship focusing on modern front-end and web technologies. Developed responsive user interfaces, implemented dynamic UI features, and enhanced web application interactivity and design.',
+      skills: ['Web Development', 'React', 'JavaScript', 'HTML/CSS', 'Tailwind CSS'],
+      image: '/images/project_webdev_new.png'
+    },
+    {
+      role: 'Embedded Systems Intern',
+      company: 'InternBee Training',
+      duration: 'Summer 2024',
+      description: 'Completed hands-on practical training in Embedded Systems. Designed and programmed microcontroller circuits, worked with sensor integration, and developed functional IoT hardware-software systems.',
+      skills: ['Embedded Systems', 'IoT', 'Microcontrollers', 'C/C++', 'Circuit Design'],
+      image: '/images/project_smart_home.jpg'
     },
   ];
 
   return (
-    <section id="experience" ref={sectionRef} className="py-24 px-6 bg-[#12121a]">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
+    <section id="experience" ref={sectionRef} className="py-24 px-6 bg-[#12121a] relative">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center lg:text-left mb-16">
           <p className="font-mono text-xs tracking-[0.2em] text-indigo-400 uppercase mb-4">My Journey</p>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-white">
             Work <span className="gradient-text">Experience</span>
           </h2>
         </div>
 
-        <div className="relative">
-          {/* Timeline Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500 via-purple-500 to-transparent md:-translate-x-1/2" />
-          
-          <div className="space-y-12">
+        {/* Desktop Split Scroll Layout */}
+        <div className="hidden lg:flex lg:flex-row gap-16 items-start justify-between relative min-h-[140vh]">
+          {/* Left Side: Sticky Text Block */}
+          <div className="lg:sticky lg:top-[25vh] lg:w-[45%] h-[50vh] relative">
             {experiences.map((exp, index) => (
-              <div key={index} className={`timeline-item relative flex flex-col md:flex-row ${index % 2 === 0 ? 'md:flex-row-reverse' : ''} gap-8`}>
-                {/* Timeline Dot */}
-                <div className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 border-4 border-[#12121a] md:-translate-x-1/2 z-10" />
-                
-                {/* Content */}
-                <div className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] ${index % 2 === 0 ? 'md:text-right' : ''}`}>
-                  <div className="glass-card rounded-2xl p-6 hover:glow-indigo-sm transition-all duration-300">
-                    <div className={`flex flex-col ${index % 2 === 0 ? 'md:items-end' : ''} mb-3`}>
-                      <span className="font-mono text-xs text-indigo-400 mb-1">{exp.duration}</span>
-                      <h3 className="font-display font-semibold text-lg text-white">{exp.role}</h3>
-                      <p className="text-zinc-400 text-sm">{exp.company}</p>
-                    </div>
-                    <p className="text-zinc-400 text-sm mb-4">{exp.description}</p>
-                    <div className={`flex flex-wrap gap-2 ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
-                      {exp.skills.map((skill, i) => (
-                        <span key={i} className="px-2 py-1 text-xs rounded-md bg-indigo-500/10 text-indigo-400">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+              <div 
+                key={index} 
+                className="experience-text-block absolute inset-0 flex flex-col justify-center opacity-0 pointer-events-none transition-all duration-300"
+                style={{ transform: 'translateY(20px)' }}
+              >
+                <span className="font-mono text-xs text-indigo-400 mb-2 block">{exp.duration}</span>
+                <h3 className="font-display font-bold text-3xl text-white mb-2">{exp.role}</h3>
+                <p className="text-zinc-500 font-medium text-lg mb-6">{exp.company}</p>
+                <p className="text-zinc-400 text-base md:text-lg mb-8 leading-relaxed">{exp.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {exp.skills.map((skill, i) => (
+                    <span key={i} className="px-3 py-1 text-xs rounded-full bg-white/5 text-zinc-400 border border-white/10">
+                      {skill}
+                    </span>
+                  ))}
                 </div>
-                
-                {/* Empty space for alternating layout */}
-                <div className="hidden md:block md:w-[calc(50%-2rem)]" />
               </div>
             ))}
           </div>
+
+          {/* Right Side: Scrolling Image Cards */}
+          <div className="lg:flex lg:flex-col lg:w-[50%] gap-[25vh] py-[10vh]">
+            {experiences.map((exp, index) => (
+              <div 
+                key={index} 
+                className="experience-visual-block w-full aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative group h-[40vh] min-h-[300px]"
+              >
+                <img 
+                  src={exp.image} 
+                  alt={exp.role} 
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#12121a]/95 via-transparent to-transparent opacity-80" />
+                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                  <div>
+                    <p className="font-mono text-sm text-zinc-400">{exp.company}</p>
+                    <p className="font-display font-semibold text-lg text-white">{exp.role}</p>
+                  </div>
+                  <span className="font-mono text-5xl font-extrabold text-indigo-500/10 tracking-wider">
+                    0{index + 1}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile/Tablet Card Stack Layout */}
+        <div className="lg:hidden space-y-12">
+          {experiences.map((exp, index) => (
+            <div key={index} className="glass-card rounded-3xl overflow-hidden border border-white/10 shadow-xl flex flex-col">
+              <div className="aspect-video w-full relative overflow-hidden">
+                <img src={exp.image} alt={exp.role} className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#12121a]/95 via-transparent to-transparent opacity-80" />
+                <div className="absolute bottom-4 left-4">
+                  <span className="font-mono text-4xl font-extrabold text-white/20">0{index + 1}</span>
+                </div>
+              </div>
+              <div className="p-6 md:p-8">
+                <span className="font-mono text-xs text-indigo-400 mb-2 block">{exp.duration}</span>
+                <h3 className="font-display font-bold text-2xl text-white mb-1">{exp.role}</h3>
+                <p className="text-zinc-400 font-medium text-sm mb-4">{exp.company}</p>
+                <p className="text-zinc-400 text-sm mb-6 leading-relaxed">{exp.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {exp.skills.map((skill, i) => (
+                    <span key={i} className="px-2.5 py-1 text-xs rounded-full bg-white/5 text-zinc-400 border border-white/10">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -918,19 +1037,49 @@ function EducationSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.edu-card', 
-        { opacity: 0, y: 30 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          stagger: 0.15,
-          duration: 0.6,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
-          }
-        }
-      );
+      // Only animate on desktop (lg viewport)
+      if (window.innerWidth >= 1024) {
+        const visualBlocks = gsap.utils.toArray<HTMLElement>('.edu-visual-block');
+        const textBlocks = gsap.utils.toArray<HTMLElement>('.edu-text-block');
+        
+        // Initial state: first text block is active
+        gsap.set(textBlocks[0], { opacity: 1, y: 0, pointerEvents: 'auto' });
+        
+        visualBlocks.forEach((block, index) => {
+          ScrollTrigger.create({
+            trigger: block,
+            start: 'top 50%',
+            end: 'bottom 50%',
+            onToggle: (self) => {
+              if (self.isActive) {
+                // Fade in corresponding text block
+                gsap.to(textBlocks[index], { 
+                  opacity: 1, 
+                  y: 0, 
+                  duration: 0.5, 
+                  pointerEvents: 'auto',
+                  overwrite: 'auto',
+                  ease: 'power2.out' 
+                });
+                
+                // Fade out others
+                textBlocks.forEach((tb, i) => {
+                  if (i !== index) {
+                    gsap.to(tb, { 
+                      opacity: 0, 
+                      y: -20, 
+                      duration: 0.5, 
+                      pointerEvents: 'none',
+                      overwrite: 'auto',
+                      ease: 'power2.in' 
+                    });
+                  }
+                });
+              }
+            }
+          });
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -942,59 +1091,120 @@ function EducationSection() {
       institution: 'University Name',
       duration: '2023 – 2027 (Expected)',
       details: 'Pursuing undergraduate degree with focus on embedded systems and signal processing.',
-      coursework: ['Signals & Systems', 'Digital Electronics', 'Communication Theory', 'Microcontrollers', 'VLSI Design']
+      coursework: ['Signals & Systems', 'Digital Electronics', 'Communication Theory', 'Microcontrollers', 'VLSI Design'],
+      image: '/images/edu_btech_new.png'
     },
     {
       degree: 'Class 12th',
       institution: 'Kendriya Vidyalaya, Katihar',
       duration: '2023',
-      details: 'Completed senior secondary education with Science stream',
-      coursework: []
+      details: 'Completed senior secondary education with Science stream.',
+      coursework: [],
+      image: '/images/edu_class12_new.png'
     },
     {
       degree: 'Class 10th',
       institution: 'Kendriya Vidyalaya, Katihar',
       duration: '2021',
-      details: 'Completed secondary education',
-      coursework: []
+      details: 'Completed secondary education.',
+      coursework: [],
+      image: '/images/edu_class10_new.png'
     }
   ];
 
   return (
-    <section id="education" ref={sectionRef} className="py-24 px-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
+    <section id="education" ref={sectionRef} className="py-24 px-6 relative">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center lg:text-left mb-16">
           <p className="font-mono text-xs tracking-[0.2em] text-indigo-400 uppercase mb-4">Academic Background</p>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-white">
             <span className="gradient-text">Education</span>
           </h2>
         </div>
 
-        <div className="space-y-6">
-          {education.map((edu, index) => (
-            <div key={index} className="edu-card glass-card rounded-2xl p-6 md:p-8 hover:glow-indigo-sm transition-all duration-300">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
-                <div>
-                  <h3 className="font-display font-semibold text-xl text-white mb-1 transition-colors">{edu.degree}</h3>
-                  <p className="text-indigo-400 font-medium">{edu.institution}</p>
-                </div>
-                <div className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-sm whitespace-nowrap">
-                  {edu.duration}
+        {/* Desktop Split Scroll Layout */}
+        <div className="hidden lg:flex lg:flex-row gap-16 items-start justify-between relative min-h-[140vh]">
+          {/* Left Side: Sticky Text Block */}
+          <div className="lg:sticky lg:top-[25vh] lg:w-[45%] h-[50vh] relative">
+            {education.map((edu, index) => (
+              <div 
+                key={index} 
+                className="edu-text-block absolute inset-0 flex flex-col justify-center opacity-0 pointer-events-none transition-all duration-300"
+                style={{ transform: 'translateY(20px)' }}
+              >
+                <span className="font-mono text-xs text-indigo-400 mb-2 block">{edu.duration}</span>
+                <h3 className="font-display font-bold text-3xl text-white mb-2">{edu.degree}</h3>
+                <p className="text-zinc-500 font-medium text-lg mb-6">{edu.institution}</p>
+                <p className="text-zinc-400 text-base md:text-lg mb-8 leading-relaxed">{edu.details}</p>
+                
+                {edu.coursework.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-sm text-zinc-500 mr-2 flex items-center">Coursework:</span>
+                    {edu.coursework.map((course, i) => (
+                      <span key={i} className="px-3 py-1 text-xs rounded-full bg-white/5 text-zinc-400 border border-white/10">
+                        {course}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Right Side: Scrolling Image Cards */}
+          <div className="lg:flex lg:flex-col lg:w-[50%] gap-[25vh] py-[10vh]">
+            {education.map((edu, index) => (
+              <div 
+                key={index} 
+                className="edu-visual-block w-full aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative group h-[40vh] min-h-[300px]"
+              >
+                <img 
+                  src={edu.image} 
+                  alt={edu.degree} 
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#12121a]/95 via-transparent to-transparent opacity-80" />
+                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                  <div>
+                    <p className="font-mono text-sm text-zinc-400">{edu.institution}</p>
+                    <p className="font-display font-semibold text-lg text-white">{edu.degree}</p>
+                  </div>
+                  <span className="font-mono text-5xl font-extrabold text-indigo-500/10 tracking-wider">
+                    0{index + 1}
+                  </span>
                 </div>
               </div>
-              
-              <p className="text-zinc-400 mb-4">{edu.details}</p>
-              
-              {edu.coursework.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-sm text-zinc-500 mr-2 flex items-center">Coursework:</span>
-                  {edu.coursework.map((course, i) => (
-                    <span key={i} className="px-2 py-1 text-xs rounded-md bg-white/5 text-zinc-300 border border-white/10">
-                      {course}
-                    </span>
-                  ))}
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile/Tablet Card Stack Layout */}
+        <div className="lg:hidden space-y-12">
+          {education.map((edu, index) => (
+            <div key={index} className="glass-card rounded-3xl overflow-hidden border border-white/10 shadow-xl flex flex-col">
+              <div className="aspect-video w-full relative overflow-hidden">
+                <img src={edu.image} alt={edu.degree} className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#12121a]/95 via-transparent to-transparent opacity-80" />
+                <div className="absolute bottom-4 left-4">
+                  <span className="font-mono text-4xl font-extrabold text-white/20">0{index + 1}</span>
                 </div>
-              )}
+              </div>
+              <div className="p-6 md:p-8">
+                <span className="font-mono text-xs text-indigo-400 mb-2 block">{edu.duration}</span>
+                <h3 className="font-display font-bold text-2xl text-white mb-1">{edu.degree}</h3>
+                <p className="text-zinc-400 font-medium text-sm mb-4">{edu.institution}</p>
+                <p className="text-zinc-400 text-sm mb-6 leading-relaxed">{edu.details}</p>
+                {edu.coursework.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs text-zinc-500 mr-2 flex items-center">Coursework:</span>
+                    {edu.coursework.map((course, i) => (
+                      <span key={i} className="px-2.5 py-1 text-xs rounded-full bg-white/5 text-zinc-400 border border-white/10">
+                        {course}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
