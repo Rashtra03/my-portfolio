@@ -921,7 +921,7 @@ function ExperienceSection() {
     {
       role: 'Web Development Intern',
       company: 'Invigo Infotech',
-      duration: 'Summer 2024',
+      duration: 'Summer 2025',
       description: 'Completed an intensive internship focusing on modern front-end and web technologies. Developed responsive user interfaces, implemented dynamic UI features, and enhanced web application interactivity and design.',
       skills: ['Web Development', 'React', 'JavaScript', 'HTML/CSS', 'Tailwind CSS'],
       image: '/images/project_webdev_new.png'
@@ -929,7 +929,7 @@ function ExperienceSection() {
     {
       role: 'Embedded Systems Intern',
       company: 'InternBee Training',
-      duration: 'Summer 2024',
+      duration: 'Summer 2026',
       description: 'Completed hands-on practical training in Embedded Systems. Designed and programmed microcontroller circuits, worked with sensor integration, and developed functional IoT hardware-software systems.',
       skills: ['Embedded Systems', 'IoT', 'Microcontrollers', 'C/C++', 'Circuit Design'],
       image: '/images/project_smart_home.jpg'
@@ -1238,9 +1238,12 @@ function CertificationsSection() {
   }, []);
 
   const certifications = [
-    { name: 'Google Workspace', issuer: 'Google', year: '2024' },
-    { name: 'Software Engineer Intern', issuer: 'HackerRank', year: '2024' },
+    { name: 'Google Workspace', issuer: 'Google', year: '2025' },
+    { name: 'Software Engineer Intern', issuer: 'HackerRank', year: '2025' },
     { name: 'Astronomy & Astrophysics Intern', issuer: 'ISA Summer School', year: '2025' },
+    { name: 'Google AI', issuer: 'Coursera', year: '2026' },
+    { name: 'JavaScript Developer', issuer: 'freeCodeCamp', year: '2026' },
+    { name: 'Python Essentials 1', issuer: 'Cisco', year: '2026' },
   ];
 
   return (
