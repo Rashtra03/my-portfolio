@@ -731,6 +731,13 @@ function ProjectsSection() {
 
   const projects = [
     {
+      title: 'Sagar CSC Digital Seva',
+      description: 'A professional digital services portal built for a government-authorized CSC center, offering 20+ citizen services including Aadhaar, PAN, certificates, and passports with a modern UI.',
+      image: '/images/project_sagar_csc.png',
+      tech: ['React', 'Tailwind CSS', 'Vite', 'Framer Motion'],
+      links: { github: 'https://github.com/rashtra03/sagar-csc-frontend', demo: 'https://sagar-csc-frontend.vercel.app/' }
+    },
+    {
       title: 'Refokus Clone',
       description: 'A pixel-perfect clone of the award-winning Refokus website, featuring complex GSAP animations, smooth scrolling, and dynamic interactions.',
       image: '/images/project_refokus.png',
@@ -806,6 +813,8 @@ function ProjectsSection() {
                   <div className="flex flex-wrap gap-4 mt-auto">
                     <a 
                       href={project.links.github} 
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="btn-secondary flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 hover:border-white/20 hover:bg-white/5 text-sm text-zinc-300 hover:text-white transition-all duration-300"
                     >
                       <Github className="w-5 h-5" />
@@ -814,8 +823,10 @@ function ProjectsSection() {
                     {project.links.demo && (
                       <a 
                         href={project.links.demo} 
+                        target="_blank"
+                        rel="noopener noreferrer"
                         onClick={(e) => {
-                          if (project.title === 'E-commerce Web Page' || project.title === 'Refokus Clone') {
+                          if (project.title === 'E-commerce Web Page' || project.title === 'Refokus Clone' || project.title === 'Sagar CSC Digital Seva') {
                             e.preventDefault();
                             setActiveDemo({ url: project.links.demo!, title: project.title });
                           }
