@@ -729,7 +729,19 @@ function ProjectsSection() {
     return () => ctx.revert();
   }, []);
 
-  const projects = [
+  interface Project {
+    title: string;
+    description: string;
+    image: string;
+    video?: string;
+    tech: string[];
+    links: {
+      github: string;
+      demo: string | null;
+    };
+  }
+
+  const projects: Project[] = [
     {
       title: 'SHIV CSC CENTER',
       description: 'A professional digital services portal built for a government-authorized CSC center, offering 20+ citizen services including Aadhaar, PAN, certificates, and passports with a modern UI.',
@@ -840,13 +852,33 @@ function ProjectsSection() {
                   </div>
                 </div>
                 
-                {/* Right Side: Visual Image */}
+                {/* Right Side: Visual Image/Video */}
                 <div className="flex-[1.2] relative overflow-hidden min-h-[300px] lg:min-h-0 border-t lg:border-t-0 lg:border-l border-white/10 group">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                  {project.video ? (
+                    <video 
+                      src={project.video} 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : project.image && (project.image.endsWith('.mp4') || project.image.endsWith('.webm') || project.image.endsWith('.ogg')) ? (
+                    <video 
+                      src={project.image} 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#12121a] via-transparent to-transparent opacity-90 lg:opacity-70" />
                 </div>
               </div>
