@@ -731,7 +731,7 @@ function ProjectsSection() {
 
   const projects = [
     {
-      title: 'Sagar CSC Digital Seva',
+      title: 'SHIV CSC CENTER',
       description: 'A professional digital services portal built for a government-authorized CSC center, offering 20+ citizen services including Aadhaar, PAN, certificates, and passports with a modern UI.',
       image: 'images/project_sagar_csc.png',
       tech: ['React', 'Tailwind CSS', 'Vite', 'Framer Motion'],
