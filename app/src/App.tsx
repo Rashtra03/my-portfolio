@@ -355,7 +355,7 @@ function HeroSection() {
       {/* Background */}
       <div className="absolute inset-0">
         <img 
-          src="/images/hero_gradient.jpg" 
+          src="images/hero_gradient.jpg" 
           alt="" 
           className="w-full h-full object-cover opacity-60 light-hero-img"
         />
@@ -531,7 +531,7 @@ function AboutSection() {
             <div className="relative rounded-2xl overflow-hidden gradient-border">
               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/30 to-purple-500/30 mix-blend-overlay z-10 transition-opacity duration-500 group-hover:opacity-0 pointer-events-none" />
               <img 
-                src="/images/about_portrait.jpg" 
+                src="images/about_portrait.jpg" 
                 alt="Rashtra Bhushan" 
                 className="w-full aspect-[3/4] object-cover contrast-[1.1] brightness-[0.9] grayscale-[0.5] transition-all duration-500 group-hover:grayscale-0 group-hover:brightness-100"
                 onMouseEnter={(e) => {
@@ -733,28 +733,28 @@ function ProjectsSection() {
     {
       title: 'Sagar CSC Digital Seva',
       description: 'A professional digital services portal built for a government-authorized CSC center, offering 20+ citizen services including Aadhaar, PAN, certificates, and passports with a modern UI.',
-      image: '/images/project_sagar_csc.png',
+      image: 'images/project_sagar_csc.png',
       tech: ['React', 'Tailwind CSS', 'Vite', 'Framer Motion'],
       links: { github: 'https://github.com/rashtra03/sagar-csc-frontend', demo: 'https://sagar-csc-frontend.vercel.app/' }
     },
     {
       title: 'Refokus Clone',
       description: 'A pixel-perfect clone of the award-winning Refokus website, featuring complex GSAP animations, smooth scrolling, and dynamic interactions.',
-      image: '/images/project_refokus.png',
+      image: 'images/project_refokus.png',
       tech: ['React', 'Tailwind CSS', 'GSAP', 'Framer Motion'],
       links: { github: 'https://github.com/rashtra03/refokus_clone', demo: 'https://rashtra03.github.io/refokus_clone/' }
     },
     {
       title: 'E-commerce Web Page',
       description: 'A modern, responsive e-commerce web application with product listings and interactive UI components.',
-      image: '/images/project_ecommerce.jpg',
+      image: 'images/project_ecommerce.jpg',
       tech: ['React', 'JavaScript', 'HTML/CSS', 'Tailwind'],
       links: { github: 'https://github.com/rashtra03/E-Commerce-Store', demo: 'https://rashtra03.github.io/E-Commerce-Store/' }
     },
     {
       title: 'Library Management System',
       description: 'Python-based library system with add, issue, return, and view operations. Features clean CLI interface and SQLite database.',
-      image: '/images/project_library.jpg',
+      image: 'images/project_library.jpg',
       tech: ['Python', 'SQLite', 'OOP'],
       links: { github: '#', demo: null }
     },
@@ -927,7 +927,7 @@ function ExperienceSection() {
       duration: 'Summer 2025',
       description: 'Worked on JWST MIRI data analysis, learned fundamentals of spectroscopy, and enhanced scientific programming skills. Collaborated with researchers on spectral line identification projects.',
       skills: ['Data Analysis', 'Python', 'Astrophysics', 'Spectroscopy'],
-      image: '/images/project_jwst.jpg'
+      image: 'images/project_jwst.jpg'
     },
     {
       role: 'Web Development Intern',
@@ -935,7 +935,7 @@ function ExperienceSection() {
       duration: 'Summer 2025',
       description: 'Completed an intensive internship focusing on modern front-end and web technologies. Developed responsive user interfaces, implemented dynamic UI features, and enhanced web application interactivity and design.',
       skills: ['Web Development', 'React', 'JavaScript', 'HTML/CSS', 'Tailwind CSS'],
-      image: '/images/project_webdev_new.png'
+      image: 'images/project_webdev_new.png'
     },
     {
       role: 'Embedded Systems Intern',
@@ -943,7 +943,7 @@ function ExperienceSection() {
       duration: 'Summer 2026',
       description: 'Completed hands-on practical training in Embedded Systems. Designed and programmed microcontroller circuits, worked with sensor integration, and developed functional IoT hardware-software systems.',
       skills: ['Embedded Systems', 'IoT', 'Microcontrollers', 'C/C++', 'Circuit Design'],
-      image: '/images/project_smart_home.jpg'
+      image: 'images/project_smart_home.jpg'
     },
   ];
 
@@ -1103,7 +1103,7 @@ function EducationSection() {
       duration: '2023 – 2027 (Expected)',
       details: 'Pursuing undergraduate degree with focus on embedded systems and signal processing.',
       coursework: ['Signals & Systems', 'Digital Electronics', 'Communication Theory', 'Microcontrollers', 'VLSI Design'],
-      image: '/images/edu_btech_new.png'
+      image: 'images/edu_btech_new.png'
     },
     {
       degree: 'Class 12th',
@@ -1111,7 +1111,7 @@ function EducationSection() {
       duration: '2023',
       details: 'Completed senior secondary education with Science stream.',
       coursework: [],
-      image: '/images/edu_class12_new.png'
+      image: 'images/edu_class12_new.png'
     },
     {
       degree: 'Class 10th',
@@ -1119,7 +1119,7 @@ function EducationSection() {
       duration: '2021',
       details: 'Completed secondary education.',
       coursework: [],
-      image: '/images/edu_class10_new.png'
+      image: 'images/edu_class10_new.png'
     }
   ];
 
