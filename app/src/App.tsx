@@ -732,7 +732,7 @@ function ProjectsSection() {
   interface Project {
     title: string;
     description: string;
-    image: string;
+    image?: string;
     video?: string;
     tech: string[];
     links: {
@@ -745,28 +745,28 @@ function ProjectsSection() {
     {
       title: 'SHIV CSC CENTER',
       description: 'A professional digital services portal built for a government-authorized CSC center, offering 20+ citizen services including Aadhaar, PAN, certificates, and passports with a modern UI.',
-      image: 'images/shivecsccenter.mp4',
+      video: 'images/shivecsccenter.mp4',
       tech: ['React', 'Tailwind CSS', 'Vite', 'Framer Motion'],
       links: { github: 'https://github.com/rashtra03/sagar-csc-frontend', demo: 'https://sagar-csc-frontend.vercel.app/' }
     },
     {
       title: 'Refokus Clone',
       description: 'A pixel-perfect clone of the award-winning Refokus website, featuring complex GSAP animations, smooth scrolling, and dynamic interactions.',
-      image: 'images/rufokus.mp4',
+      video: 'images/rufokus.mp4',
       tech: ['React', 'Tailwind CSS', 'GSAP', 'Framer Motion'],
       links: { github: 'https://github.com/rashtra03/refokus_clone', demo: 'https://rashtra03.github.io/refokus_clone/' }
     },
     {
       title: 'E-commerce Web Page',
       description: 'A modern, responsive e-commerce web application with product listings and interactive UI components.',
-      image: 'images/e-commerce.mp4',
+      video: 'images/e-commerce.mp4',
       tech: ['React', 'JavaScript', 'HTML/CSS', 'Tailwind'],
       links: { github: 'https://github.com/rashtra03/E-Commerce-Store', demo: 'https://rashtra03.github.io/E-Commerce-Store/' }
     },
     {
       title: 'Library Management System',
       description: 'Python-based library system with add, issue, return, and view operations. Features clean CLI interface and SQLite database.',
-      image: 'images/project_library.jpg',
+      video: 'images/project_library.mp4',
       tech: ['Python', 'SQLite', 'OOP'],
       links: { github: '#', demo: null }
     },
@@ -872,12 +872,16 @@ function ProjectsSection() {
                       playsInline
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                  ) : (
+                  ) : project.image ? (
                     <img 
                       src={project.image} 
                       alt={project.title}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
+                  ) : (
+                    <div className="absolute inset-0 w-full h-full bg-[#12121a] flex items-center justify-center text-zinc-600">
+                      No Preview Available
+                    </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#12121a] via-transparent to-transparent opacity-90 lg:opacity-70" />
                 </div>
