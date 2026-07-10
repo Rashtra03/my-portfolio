@@ -766,7 +766,7 @@ function ProjectsSection() {
     {
       title: 'Library Management System',
       description: 'Python-based library system with add, issue, return, and view operations. Features clean CLI interface and SQLite database.',
-      video: 'images/project_library.mp4',
+      image: 'images/project_library.jpg',
       tech: ['Python', 'SQLite', 'OOP'],
       links: { github: '#', demo: null }
     },
