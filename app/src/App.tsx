@@ -745,21 +745,21 @@ function ProjectsSection() {
     {
       title: 'SHIV CSC CENTER',
       description: 'A professional digital services portal built for a government-authorized CSC center, offering 20+ citizen services including Aadhaar, PAN, certificates, and passports with a modern UI.',
-      image: 'images/project_sagar_csc.png',
+      image: 'images/shivecsccenter.mp4',
       tech: ['React', 'Tailwind CSS', 'Vite', 'Framer Motion'],
       links: { github: 'https://github.com/rashtra03/sagar-csc-frontend', demo: 'https://sagar-csc-frontend.vercel.app/' }
     },
     {
       title: 'Refokus Clone',
       description: 'A pixel-perfect clone of the award-winning Refokus website, featuring complex GSAP animations, smooth scrolling, and dynamic interactions.',
-      image: 'images/project_refokus.png',
+      image: 'images/rufokus.mp4',
       tech: ['React', 'Tailwind CSS', 'GSAP', 'Framer Motion'],
       links: { github: 'https://github.com/rashtra03/refokus_clone', demo: 'https://rashtra03.github.io/refokus_clone/' }
     },
     {
       title: 'E-commerce Web Page',
       description: 'A modern, responsive e-commerce web application with product listings and interactive UI components.',
-      image: 'images/project_ecommerce.jpg',
+      image: 'images/e-commerce.mp4',
       tech: ['React', 'JavaScript', 'HTML/CSS', 'Tailwind'],
       links: { github: 'https://github.com/rashtra03/E-Commerce-Store', demo: 'https://rashtra03.github.io/E-Commerce-Store/' }
     },
